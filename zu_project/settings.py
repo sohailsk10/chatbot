@@ -91,10 +91,10 @@ DATABASES = {
     "default": {
         "ENGINE": "mssql",
         "NAME": "zu_chatbot_log_dev",
-        "USER": "chatboat_sa",
-        "PASSWORD": "ch@tb0@t$@",
-        "HOST": "192.168.5.79",
-        "PORT": "1433",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": "",
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
         },

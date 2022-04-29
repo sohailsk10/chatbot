@@ -18,8 +18,8 @@ from django.urls import path
 from zayed_university_app import views
 
 urlpatterns = [
-    path('chatbot/admin/', admin.site.urls),
-    path('chatbot/watson-assistant/', views.get_response_from_watson, name="watson-assistant"),
-    path('chatbot/login/', views.login, name='login'),
-    path('chatbot/wrong_answer/', views.wrong_answer, name="wrong_answer"),
+    path('admin/', admin.site.urls),
+    path('watson-assistant/', views.get_response_from_watson, name="watson-assistant"),
+    path('login/', views.login, name='login'),
+    path('wrong_answer/', views.wrong_answer, name="wrong_answer"),
 ]
