@@ -13,6 +13,7 @@ from spacy.language import Language
 from .models import Log, EventType
 from difflib import SequenceMatcher
 import xml.etree.ElementTree as ET
+import requests
 
 tree = ET.parse('zayed_university_app\ZU_xml_v2.xml')
 
@@ -134,16 +135,30 @@ def get_response_from_watson(request):
         res = response.get_result()
         print("In 1st try")
         output = ''
-        link = 'www.zu.ac.ae/main'
+        link = 'https://www.zu.ac.ae/main'
         root = tree.getroot()
         for country in root.findall('system-folder'):
             name = country.find('name').text
             path = country.find('path').text
             if similar(name, text) >= 0.8:
                 output = link + path
+                payload = {}
+                headers = {}
 
-                return JsonResponse(
-                    {'session_id': '', 'answer': output, 'intent': 'general', 'url': output})
+                response = requests.request("GET", output, headers=headers, data=payload)
+                if response.status_code == 200:
+                    eid = EventType.objects.get(id=int(4))
+                    Log.objects.create(event_type_id=eid, user_email=user_email, user_ip=ip, event_question=text,
+                                       event_answer=output, intent='General')
+                    return JsonResponse(
+                        {'session_id': '', 'answer': '', 'intent': 'general', 'url': output})
+
+                else:
+                    eid = EventType.objects.get(id=int(4))
+                    Log.objects.create(event_type_id=eid, user_email=user_email, user_ip=ip, event_question=text,
+                                       event_answer=str(response.status_code), intent='General')
+                    return JsonResponse(
+                        {'session_id': '', 'answer': str(response.status_code) + ' Link is not up', 'intent': 'general', 'url': output})
 
         try:
             print("In 2nd Try")
